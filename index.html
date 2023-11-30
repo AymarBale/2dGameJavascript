@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/mainText.css">
+</head>
+
+<body>
+    <script src="./node_modules/matter-js/build/matter.js"></script>
+    <script src="./js/main.js"></script>
+    <script>
+        let engine = Matter.Engine.create();
+        let playerPosX = 0;
+        let playerPosY = 0;
+        let isPlaying = false;
+
+        let render = Matter.Render.create({
+            element: document.body,
+            engine: engine,
+            options: {
+                width: 1500,
+                height: 690,
+                wireframes: false
+            }
+        });
+
+        let groundL = Matter.Bodies.rectangle(0, 0, 50, 1500, { isStatic: true });
+        let groundR = Matter.Bodies.rectangle(1500, 0, 50, 1500, { isStatic: true });
+
+        let mouse = Matter.Mouse.create(render.canvas);
+        let mouseConstraint = Matter.MouseConstraint.create(engine, {
+            mouse: mouse,
+            constraint: {
+                render: { visible: true }
+            }
+        });
+        render.mouse = mouse;
+
+        let stack = Matter.Composites.stack(200, 200, 2, 2, 0, 0, function (x, y) {
+            let sides = Math.round(Matter.Common.random(2, 8));
+            let posY = Math.round(Matter.Common.random(-100, -200));
+            let posX = Math.round(Matter.Common.random(0, 1600));
+            let myPoly = Matter.Bodies.polygon(posX, posY, sides, Matter.Common.random(10, 40));
+            myPoly.label = "enemy";
+            return myPoly;
+        });
+
+
+        stack.bodies.forEach(function (box) { // Random velocity along the x-axis
+            const velocityY = Math.random() * 25; // Random velocity along the y-axis
+            Matter.Body.setVelocity(box, { x: 0, y: velocityY });
+        });
+
+        let ball = Matter.Bodies.circle(800, 600, 30);
+        ball.isStatic = true;
+        ball.label = "myBall"
+        let sling = Matter.Constraint.create({
+            pointA: { x: 800, y: 600 },
+            bodyB: ball,
+            stiffness: 0.05
+        });
+        let firing = false;
+        Matter.Events.on(mouseConstraint, 'mousedown', function (e) {
+
+            const clickedBody = e.source.body;
+            if (clickedBody === ball) {
+                Matter.Composite.remove(engine.world, sling)
+            }
+        });
+
+        Matter.Events.on(engine, 'afterUpdate', function () {
+            if (firing && Math.abs(ball.position.x - 300) < 20 && Math.abs(ball.position.y - 600) < 20) {
+                sling.bodyB = ball;
+                firing = true;
+                Matter.World.remove(engine.world, sling);
+            }
+        });
+
+        Matter.World.add(engine.world, [stack, groundL, groundR, sling, ball, mouseConstraint]);
+        Matter.Runner.run(engine);
+        Matter.Render.run(render);
+
+        Matter.Events.on(engine, 'collisionStart', function (event) {
+            event.pairs.forEach(function (pair) {
+
+                if (((pair.bodyA.label === "enemy") && (pair.bodyB.label === "myBall")) ||
+                    ((pair.bodyA.label === "myBall") && (pair.bodyB.label === "enemy"))) {
+                    if (isPlaying) {
+                        stopGame();
+                    }
+
+
+                }
+            });
+        });
+
+
+        function stopGame() {
+            isPlaying = false;
+            Matter.Composite.remove(engine.world, ball);
+            Matter.Composite.remove(engine.world, sling)
+            reload();
+        }
+
+        function loopTimer() {
+            if (ball.position.y > 690) {
+                isPlaying = false
+                Matter.Composite.remove(engine.world, ball);
+            }
+            if (isPlaying === true) {
+                ball.isStatic = false;
+                stack.bodies.forEach(function (box) {
+                    // Check if the box is outside the visible area
+                    if (box.position.y > render.options.height) {
+                        // Remove the box from the world
+                        Matter.Composite.remove(engine.world, box);
+
+                        // Create a new box at the top of the screen
+                        let sides = Math.round(Matter.Common.random(2, 8));
+                        let posY = Math.round(Matter.Common.random(-100, -200));
+                        let posX = Math.round(Matter.Common.random(0, 1600));
+                        const polys = Matter.Bodies.polygon(posX, posY, sides, Matter.Common.random(30, 40));
+                        polys.label = "enemy";
+                        Matter.World.add(engine.world, polys);
+
+                        const direction = Matter.Vector.sub(ball.position, polys.position);
+
+                        // Normalize the direction vector
+                        const normalizedDirection = Matter.Vector.normalise(direction);
+
+                        // Apply force to boxA
+                        const force = Matter.Vector.mult(normalizedDirection, 0.25);
+                        Matter.Body.applyForce(polys, ball.position, force);
+
+                    }
+                }
+                );
+            }
+        }
+        const timerInterval = setInterval(() => {
+            loopTimer();
+        }, 1000);
+
+
+    </script>
+    <!--<h1 id="mainTitle"></h1>-->
+    <h1 data-text="Dodge the shapes" id="mainTitle"><span>Dodge the shapes</span></h1>
+    <button onclick="startGame()" id="start">start</button>
+    <p id="tuto"> drag the blue circle to avoid the shapes press <span>start</span> to begin</p>
+</body>
+
+</html>

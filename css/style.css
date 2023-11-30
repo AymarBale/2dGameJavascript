@@ -1,0 +1,65 @@
+@font-face {
+    font-family: butText;
+    src: url("../fonts/BebasNeue-Regular.ttf");
+}
+
+body {
+    position: relative;
+}
+
+html {
+    overflow: hidden;
+}
+
+h1 {
+    position: absolute;
+    top: 0px;
+    left: 30%;
+    margin: auto;
+    color: rgb(8, 122, 216);
+    letter-spacing: 5.8px;
+    font-size: 54px;
+    display: inline-block;
+}
+
+/**/
+
+button {
+    background-color: rgb(8, 122, 216);
+    position: absolute;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    left: 0px;
+    top: 50vh;
+    left: 50vw;
+    font-family: butText;
+    letter-spacing: 5.8px;
+}
+
+button:hover {
+    background-color: rgb(20, 21, 31);
+    color: rgb(8, 122, 216);
+    border: 4px solid rgb(8, 122, 216);
+    transform: translateX(-4px);
+    transform: translateY(-4px);
+}
+
+p {
+    position: absolute;
+    font-family: butText;
+    letter-spacing: 5.8px;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    width: 100%;
+}
+
+span {
+    color: rgb(8, 122, 216);
+    ;
+}

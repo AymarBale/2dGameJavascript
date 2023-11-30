@@ -1,0 +1,47 @@
+@font-face {
+    font-family: test;
+    src: url("../fonts/TitilliumWeb-Black.ttf");
+}
+
+:root {
+    --hs: 225, 100%;
+    --paper: hsl(var(--hs), 25%);
+    --highlight: hsl(var(--hs), 45%);
+    --shadow: hsl(var(--hs), 15%);
+}
+
+h1 {
+    font-family: test;
+    font-size: 100px;
+    letter-spacing: 0.5px;
+    display: grid;
+    place-items: center;
+    grid-template-areas: "text";
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    background-image: linear-gradient(305deg, tomato, gold, cyan);
+    margin: 0;
+
+    &>*,
+    &::after {
+        grid-area: text;
+    }
+
+    &::after {
+        content: attr(data-text);
+        color: var(--paper);
+        transform: translate(0.1em, 0.1em);
+        filter: drop-shadow(0.015em 0.015em 0.025em var(--shadow));
+        -webkit-background-clip: text;
+        color: transparent;
+        background-image: linear-gradient(var(--highlight), var(--paper));
+    }
+}
+
+body {
+    min-height: 100vh;
+    display: grid;
+    place-content: center;
+    background-color: var(--paper);
+}
