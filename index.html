@@ -100,6 +100,10 @@
 
 
         function stopGame() {
+            let stopMusic = document.getElementById("ambient-audio");
+            let losingSound = document.getElementById("losingSound");
+            stopMusic.pause();
+            losingSound.play();
             isPlaying = false;
             Matter.Composite.remove(engine.world, ball);
             Matter.Composite.remove(engine.world, sling)
@@ -126,7 +130,8 @@
                         const polys = Matter.Bodies.polygon(posX, posY, sides, Matter.Common.random(30, 40));
                         polys.label = "enemy";
                         Matter.World.add(engine.world, polys);
-
+                        let EnemySound = document.getElementById("myEnemy-audio");
+                        EnemySound.play();
                         const direction = Matter.Vector.sub(ball.position, polys.position);
 
                         // Normalize the direction vector
@@ -147,10 +152,19 @@
 
 
     </script>
-    <!--<h1 id="mainTitle"></h1>-->
+    <audio src="./sound/mouseClick.mp3" id="my-audio"></audio>
+    <audio src="./sound/enemy.mp3" id="myEnemy-audio"></audio>
+    <audio src="./sound/losingSound.mp3" id="losingSound"></audio>
+    <audio controls loop id="ambient-audio">
+        <source src="./sound/ambientSound.mp3" type="audio/mp3">
+    </audio>
+    <!--<audio src="./js/ambientSound.mp3" id="ambient-audio"></audio>-->
     <h1 data-text="Dodge the shapes" id="mainTitle"><span>Dodge the shapes</span></h1>
-    <button onclick="startGame()" id="start">start</button>
+    <button onclick="startGame();playMusic()" id="start">start</button>
     <p id="tuto"> drag the blue circle to avoid the shapes press <span>start</span> to begin</p>
+    <p id="myTimer">Timer <span id="changeTime">0:00</span></p>
+    <p id="score">Your score is:</p>
+
 </body>
 
 </html>

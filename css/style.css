@@ -61,5 +61,18 @@ p {
 
 span {
     color: rgb(8, 122, 216);
-    ;
+}
+
+#myTimer {
+    text-align: left;
+    font-size: 34px;
+}
+
+#ambient-audio {
+    display: none;
+}
+
+#score {
+    bottom: 0px;
+    display: none;
 }
