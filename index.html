@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="./css/mainText.css">
 </head>
 
-<body>
+<body id="elementToShake">
     <script src="./node_modules/matter-js/build/matter.js"></script>
     <script src="./js/main.js"></script>
     <script>
@@ -17,6 +17,7 @@
         let playerPosX = 0;
         let playerPosY = 0;
         let isPlaying = false;
+        let colorArr = ['yellow', 'red', 'green', 'pink', 'purple'];
 
         let render = Matter.Render.create({
             element: document.body,
@@ -45,6 +46,9 @@
             let posY = Math.round(Matter.Common.random(-100, -200));
             let posX = Math.round(Matter.Common.random(0, 1600));
             let myPoly = Matter.Bodies.polygon(posX, posY, sides, Matter.Common.random(10, 40));
+            myPoly.render.strokeStyle = 'gold';
+            myPoly.render.lineWidth = 2;
+            myPoly.render.fillStyle = colorArr[Math.floor(Math.random() * colorArr.length)];
             myPoly.label = "enemy";
             return myPoly;
         });
@@ -92,8 +96,6 @@
                     if (isPlaying) {
                         stopGame();
                     }
-
-
                 }
             });
         });
@@ -128,6 +130,8 @@
                         let posY = Math.round(Matter.Common.random(-100, -200));
                         let posX = Math.round(Matter.Common.random(0, 1600));
                         const polys = Matter.Bodies.polygon(posX, posY, sides, Matter.Common.random(30, 40));
+                        polys.render.lineWidth = 2;
+                        polys.render.fillStyle = colorArr[Math.floor(Math.random() * colorArr.length)];
                         polys.label = "enemy";
                         Matter.World.add(engine.world, polys);
                         let EnemySound = document.getElementById("myEnemy-audio");
