@@ -2,7 +2,7 @@
 
 <h1>Introduction</h1>
 
-<p> Ce projet a ete realise par moi. Dans ce projet le but ete de creer un jeu en utilisant la librairie de Javascript Matter.js qui est un simulateur de physique pour les formes .Dans ce jeu vous devez esquiver les forme qui sont lance vers vous pour gagner .Il y'a aussi un timer donc le plus long vous pouvez esquiver mieux sera votre score.J'ai aussi utilisez du css pour rendre le jeu plus beau</p>
+<p>Ce projet a été realise par moi. Dans ce projet le but ete de creer un jeu en utilisant la librairie de Javascript Matter js qui est un simulateur de physique pour les formes .Dans ce jeu vous devez esquiver les formes qui sont lances vers vous pour gagner .Il y a aussi un timer donc le plus long vous pouvez esquiver mieux sera votre score. J'ai aussi utilisé du css pour rendre le jeu plus beau</p>
 
 <h1>Demo</h1>
 
